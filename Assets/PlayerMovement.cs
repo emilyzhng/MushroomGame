@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 
 public class PlayerMovement : MonoBehaviour
@@ -13,7 +14,6 @@ public class PlayerMovement : MonoBehaviour
    public float jump = 13;
    public Boolean jreq;
    public float gravity;
-   private GameObject spawned;
    public GameObject button;
    public GameObject canvas;
    
@@ -27,6 +27,7 @@ public class PlayerMovement : MonoBehaviour
         rb.useGravity = false;
         gravity = -50;
         jump = 20;
+        button.SetActive(false);
     }
 
     void OnMove (InputValue movementValue)
@@ -43,10 +44,11 @@ public class PlayerMovement : MonoBehaviour
         Vector3 camForward = Camera.main.transform.forward; 
         Vector3 camRight = Camera.main.transform.right; camForward.y = 0; 
         camRight.y = 0; 
-        camForward.Normalize(); 
-        camRight.Normalize(); 
+
+
         Vector3 move = camForward * movementY + camRight * movementX; 
         rb.linearVelocity = new Vector3(move.x * speed, rb.linearVelocity.y, move.z * speed);
+
         rb.AddForce(Vector3.up * gravity, ForceMode.Acceleration);
 
 
@@ -78,7 +80,7 @@ public class PlayerMovement : MonoBehaviour
         if (other.CompareTag("mushroom"))
         {
             Debug.Log("enter premise");
-            spawned = Instantiate(button, canvas.transform);
+            button.SetActive(true);
         }
 
     }
@@ -87,8 +89,8 @@ public class PlayerMovement : MonoBehaviour
     {
         if (other.CompareTag("mushroom"))
         {
-            Debug.Log("exit premise");
-            Destroy(button);
+            Debug.Log("exitspawned premise");
+            button.SetActive(false);
         }
     }
 }
