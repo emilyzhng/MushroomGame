@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MushInst : MonoBehaviour
 {
@@ -8,6 +9,8 @@ public class MushInst : MonoBehaviour
     public GameObject PlayerCam;
     public GameObject InspectButton;
     public GameObject XButton;
+    private GameObject NewMush;
+    public GameObject Button;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -25,7 +28,7 @@ public class MushInst : MonoBehaviour
     {
         Vector3 BackPos = InspectBack.transform.position; 
         Vector3 Offset = new Vector3(0f, 0.6f, -5f);
-        Instantiate(Mush, BackPos+ Offset, Quaternion.identity);
+        NewMush  = Instantiate(Mush, BackPos+ Offset, Quaternion.identity);
         InspectCam.SetActive(true);
         PlayerCam.SetActive(false);
         InspectButton.SetActive(false);
@@ -37,5 +40,7 @@ public class MushInst : MonoBehaviour
         PlayerCam.SetActive(true);
         InspectCam.SetActive(false);
         XButton.SetActive(false);
+        Destroy(NewMush);
+        Button.SetActive(true);
     }
 }
