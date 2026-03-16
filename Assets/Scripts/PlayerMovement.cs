@@ -1,7 +1,7 @@
-using System;
+
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 
 public class PlayerMovement : MonoBehaviour
@@ -10,23 +10,25 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody rb;
    private float movementX;
    private float movementY;
-   public float speed = 10;
-   public float jump = 13;
-   public Boolean jreq;
+    public float moveSpeed = 10;
+    public float jumpForce = 13;
+   public bool jreq;
    public float gravity;
    public GameObject button;
    public GameObject canvas;
+   public GameObject currentmush;
+   
    
    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        speed = 10;
+        moveSpeed = 10;
         jreq = false;
         rb.useGravity = false;
         gravity = -50;
-        jump = 20;
+        jumpForce = 20;
         button.SetActive(false);
     }
 
@@ -47,7 +49,7 @@ public class PlayerMovement : MonoBehaviour
 
 
         Vector3 move = camForward * movementY + camRight * movementX; 
-        rb.linearVelocity = new Vector3(move.x * speed, rb.linearVelocity.y, move.z * speed);
+        rb.linearVelocity = new Vector3(move.x * moveSpeed, rb.linearVelocity.y, move.z * moveSpeed);
 
         rb.AddForce(Vector3.up * gravity, ForceMode.Acceleration);
 
@@ -64,7 +66,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space) && jreq)
         {
-            rb.linearVelocity = new Vector3(movementX, jump ,movementY);
+            rb.linearVelocity = new Vector3(movementX, jumpForce, movementY);
             jreq = false;
         }
 
@@ -79,18 +81,34 @@ public class PlayerMovement : MonoBehaviour
 
         if (other.CompareTag("mushroom"))
         {
-            Debug.Log("enter premise");
+            Debug.Log("hello enter premise");
+            currentmush = other.gameObject.transform.parent.gameObject;
+            Debug.Log("hello Stored mushroom: " + currentmush.name);
             button.SetActive(true);
         }
 
     }
 
-    void OnTriggerExit(Collider other)
+    public void DestroyMush()
+    {
+        Debug.Log("not destroyed printed");
+        Debug.Log("Current mush is: " + currentmush);
+
+        if (currentmush != null)
+        {
+            Debug.Log("destroyed printed");
+            Destroy(currentmush);
+            currentmush = null;
+        }
+    }
+
+    public void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("mushroom"))
         {
             Debug.Log("exitspawned premise");
             button.SetActive(false);
+            currentmush = null;
         }
     }
 }

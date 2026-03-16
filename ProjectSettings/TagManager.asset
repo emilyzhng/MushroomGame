@@ -8,6 +8,7 @@ TagManager:
   - ground
   - InspectButton
   - XButton
+  - m1bad
   layers:
   - Default
   - TransparentFX

@@ -25,8 +25,8 @@ public class Inspect : MonoBehaviour
             float RotationX = deltaMousePosition.y * rotationSpeed *  Time.deltaTime;
             float RotationY = -deltaMousePosition.x * rotationSpeed * Time.deltaTime;
 
-            Quaternion rotation = Quaternion.Euler(RotationX,RotationY,0);
-            objectInspect.rotation = rotation * objectInspect.rotation;
+            //Quaternion rotation = Quaternion.Euler(RotationX,RotationY,0);
+            //objectInspect.rotation = rotation * objectInspect.rotation;
 
             Prev = Input.mousePosition;
 
