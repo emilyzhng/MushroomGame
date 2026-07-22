@@ -2,14 +2,16 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
+using UnityEngine.InputSystem;
+using System;
 
 public class InventoryUI : MonoBehaviour
 {
     public Inventory playerInventory; 
     public GameObject itemPrefab;     
-    public Transform Grid;    
+    public Transform Grid;   
 
-    private Dictionary<MushroomScriptable, GameObject> UITracker = new Dictionary<MushroomScriptable, GameObject>();
+    public Dictionary<MushroomScriptable, GameObject> UITracker = new Dictionary<MushroomScriptable, GameObject>();
 
     public void RefreshUI()
     {
@@ -23,7 +25,7 @@ public class InventoryUI : MonoBehaviour
     {
         if (UITracker.ContainsKey(mush))
         {
-            TextMeshProUGUI quantityText = UITracker[mush].transform.Find("Quantity").GetComponent<TextMeshProUGUI>();
+            TextMeshProUGUI quantityText = UITracker[mush].transform.GetChild(1).GetComponent<TextMeshProUGUI>();
             quantityText.text = "x" + quantity;
         }
         else
@@ -38,5 +40,15 @@ public class InventoryUI : MonoBehaviour
 
             UITracker[mush] = go;
         }
+    }
+
+    public void DestoryUITracker()
+    {
+        foreach (var mush in UITracker)
+        {
+            Destroy(mush.Value);
+        }
+        Debug.Log("Destroyed");
+       
     }
 }

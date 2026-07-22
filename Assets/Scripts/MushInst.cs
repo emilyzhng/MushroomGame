@@ -1,3 +1,5 @@
+using Unity.Collections;
+using Unity.VisualScripting.Antlr3.Runtime;
 using Unity.VisualScripting.FullSerializer.Internal;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,16 +11,16 @@ public class MushInst : MonoBehaviour
     public GameObject PlayerCam;
     public GameObject InspectButton;
     public GameObject XButton;
-    private GameObject InventoryMush;
+    public GameObject InventoryMush;
     public GameObject Button;
     public GameObject CollectButton;
     public MushroomScriptable mushData;
-    private GameObject currentMushroomPrefab;
     public PlayerMovement playerMovement;
 
     public Inventory playerInventory; 
     public InventoryUI inventoryUI;    
     public GameObject inv;
+    public Inspect inspect;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -27,19 +29,20 @@ public class MushInst : MonoBehaviour
     }
 
     // Update is called once per frame
-    public void SetMushroom(GameObject mushPrefab)
+    public GameObject getMushroom()
     {
-        currentMushroomPrefab = mushPrefab;
+        return PlayerMovement.currentmush;
     }
 
     public void MakeMush()
     {
         Debug.Log("works");
-        if (currentMushroomPrefab == null) return;
+        if (getMushroom() == null) return;
 
         Vector3 BackPos = InspectBack.transform.position; 
-        Vector3 Offset = new Vector3(0f, -0.5f, -5f);
-        InventoryMush  = Instantiate(currentMushroomPrefab, BackPos+ Offset, Quaternion.identity);
+        Vector3 Offset = new Vector3(0f, 1.7f, -5f);
+        InventoryMush = Instantiate(getMushroom(), BackPos + Offset, Quaternion.identity);
+        Debug.Log("x " + InventoryMush);
 
         InspectCam.SetActive(true);
         PlayerCam.SetActive(false);
@@ -48,7 +51,8 @@ public class MushInst : MonoBehaviour
         CollectButton.SetActive(true);
         inv.SetActive(false);
         InspectBack.SetActive(true);
-        
+
+        inspect.objectInspect = InventoryMush.transform;   
     }
     public void ExitInspect()
     {
@@ -60,10 +64,11 @@ public class MushInst : MonoBehaviour
         CollectButton.SetActive(false);
         inv.SetActive(true);
         InspectBack.SetActive(false);
-    }
+    }     
      public void PhysicalCollect()
     {
         MushCategorization mushroom = InventoryMush.GetComponent<MushCategorization>();
+        Debug.LogError("1 " + mushroom.mushData);
         playerInventory.addItem(mushroom.mushData);
         
         Destroy(InventoryMush);

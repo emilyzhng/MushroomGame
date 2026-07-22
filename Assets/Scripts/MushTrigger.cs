@@ -9,7 +9,7 @@ public class MushTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            inspectSystem.SetMushroom(inspectPrefab);
+            inspectSystem.getMushroom();
             inspectSystem.InspectButton.SetActive(true);
         }
     }

@@ -1,5 +1,6 @@
 
 using Unity.Mathematics;
+using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,13 +11,14 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody rb;
    private float movementX;
    private float movementY;
-    public float moveSpeed = 10;
-    public float jumpForce = 13;
+   public static float moveSpeed = 100;
+   public float jumpForce = 13;
    public bool jreq;
    public float gravity;
    public GameObject button;
    public GameObject canvas;
-   public GameObject currentmush;
+   public static GameObject currentmush;
+   public GameObject SubmitButton;
    
    
    
@@ -82,11 +84,33 @@ public class PlayerMovement : MonoBehaviour
         if (other.CompareTag("mushroom"))
         {
             Debug.Log("hello enter premise");
-            currentmush = other.gameObject.transform.parent.gameObject;
+            currentmush = other.gameObject.transform.gameObject;
             Debug.Log("hello Stored mushroom: " + currentmush.name);
             button.SetActive(true);
         }
 
+        if (other.CompareTag("home"))
+        {
+            SubmitButton.SetActive(true);
+        }
+
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("ground"))
+        {
+            Debug.Log("Grounded!");
+            jreq = true;
+        }
+    }
+
+    void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("ground"))
+        {
+            jreq = false;
+        }
     }
 
     public void DestroyMush()
