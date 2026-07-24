@@ -9,10 +9,11 @@ public class Timer : MonoBehaviour
     public GameObject damper;
     public GameObject timesup;
     public Slider timeBar;
+    public GameObject player;
 
     void Start()
     {
-        timeInSeconds = 10;
+        timeInSeconds = 100;
         timeBar.value = 1f;
     }
 
@@ -40,6 +41,7 @@ public class Timer : MonoBehaviour
     IEnumerator WaitFiveSeconds()
     {
         yield return new WaitForSeconds(5f);
+        player.transform.position = new Vector3(29,476,147);
         timesup.SetActive(false);
         homeback.SetActive(true);
         damper.SetActive(true);
