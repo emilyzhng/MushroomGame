@@ -1,12 +1,11 @@
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class DailyEffects : MonoBehaviour
 {
     private float movementX;
     private float movementY;
     private bool reversed = true;  
+    public Timer time;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void SpeedUp()
@@ -21,17 +20,17 @@ public class DailyEffects : MonoBehaviour
 
     public void Shrink()
     {
-        transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+        Timer.timeInSeconds = Timer.timeInSeconds - 60;
     }
     public void Enlargen()
     {
-        transform.localScale = new Vector3(2f, 2f, 2f);
+        Timer.timeInSeconds = Timer.timeInSeconds - 60;
     }
 
     public void RandomEffect()
     {
         {
-            int x = Random.Range(0,4);
+            int x = Random.Range(2,3);
 
             switch (x)
             {

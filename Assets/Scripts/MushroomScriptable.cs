@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "MushroomScriptable", menuName = "Scriptable Objects/MushroomScriptable")]

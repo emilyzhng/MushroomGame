@@ -3,8 +3,15 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
+    public ScenePreloader scene;
     public void ClickStart()
     {
-        SceneManager.LoadScene("0 (3)");
+        scene.ActivatePreloadedScene();
+    }
+
+    public void Quit()
+    {
+        Application.Quit(); 
+        Debug.Log("Exitting");  
     }
 }

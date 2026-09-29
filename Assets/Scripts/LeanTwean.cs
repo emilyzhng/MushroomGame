@@ -58,11 +58,5 @@ public class LeanTweenHandle : MonoBehaviour
 
         LeanTween.scale(obj, Vector3.one, time).setEaseOutQuad();
     }
-    public static void FadeIn(GameObject obj, float time)
-    {
-        CanvasGroup group = obj.GetComponent<CanvasGroup>();
-
-        group.alpha = 0f;
-        LeanTween.alphaCanvas(group, 1f, time);
-    }   
+    
 }

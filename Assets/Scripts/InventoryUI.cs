@@ -2,8 +2,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
-using UnityEngine.InputSystem;
-using System;
 
 public class InventoryUI : MonoBehaviour
 {
@@ -48,7 +46,9 @@ public class InventoryUI : MonoBehaviour
         {
             Destroy(mush.Value);
         }
+
+        UITracker.Clear();
+
         Debug.Log("Destroyed");
-       
     }
 }

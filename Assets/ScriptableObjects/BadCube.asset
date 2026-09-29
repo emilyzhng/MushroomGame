@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MushroomScriptable
   mushroomName: Bellcap Shrooms
   isPoisonous: 1
-  icon: {fileID: 7482667652216324306, guid: 92edc52503178e8448ab4b5d897e6bb2, type: 3}
+  icon: {fileID: 21300000, guid: 1841f21a5f043674abcc94c042c23872, type: 3}

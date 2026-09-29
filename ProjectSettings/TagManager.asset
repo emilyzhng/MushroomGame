@@ -10,6 +10,7 @@ TagManager:
   - XButton
   - m1bad
   - home
+  - interact
   layers:
   - Default
   - TransparentFX

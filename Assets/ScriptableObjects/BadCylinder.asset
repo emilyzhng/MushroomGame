@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MushroomScriptable
   mushroomName: Coral Shrooms
   isPoisonous: 1
-  icon: {fileID: 7482667652216324306, guid: 6826775006d3bf743bc83fce6b1ab1ce, type: 3}
+  icon: {fileID: 21300000, guid: ecba1bbca6d51a74f8c6d1a6ad680d32, type: 3}

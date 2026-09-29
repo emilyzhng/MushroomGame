@@ -1,12 +1,10 @@
-using System;
 using UnityEngine;
-using UnityEngine.UI;
+using System.Collections;
 using TMPro;
-using JetBrains.Annotations;
 using UnityEngine.SceneManagement;
-using UnityEditor.Rendering;
+using System;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.ComponentModel.Design;
-using Unity.Properties;
 
 public class ButtonManager : MonoBehaviour
 {
@@ -29,24 +27,91 @@ public class ButtonManager : MonoBehaviour
     public Health healthclass;
     public GameObject homebackdaydisplay;
     public GameObject homebackbook;
+    public GameObject house1;
+    public GameObject house2;
+    public GameObject house3;
+    public GameObject player;
+    private Vector3 offset1 = new Vector3 (12f, 0, 4f);
+    private Vector3 offset2 = new Vector3 (12f, 5f, -8f);
+    private Vector3 offset3 = new Vector3 (-12f, 0, 4f);
+    public GameObject objectiveshow;
+    public Timer time;
+    public SFX sfx;
+    public GameObject DayReviewTextt;
+    public GameObject Day1pg1;
+    public GameObject Day1pg2;
+    public GameObject Day1Left;
+    public GameObject Day1Right;
+    public GameObject Day2pg1;
+    public GameObject Day2pg2;
+    public GameObject Day3pg1;
+    public GameObject Day3pg2;
+    public GameObject Day3pg3;
+
+
+
+
+
+
 
     public string[] Objective = { "Collect 2 Cubes", "Collect 2 Spheres and 2 Cubes", "Collect 1 Cylinders, 2 Cubes, and 2 Spheres" };
     
     public void Start()
     {
+
+        TMP_Text DayTextWood = DayReviewTextt.GetComponent<TMP_Text>();
+        String x = DayTextWood.text;
+        x = "Day " + Day + " Review";
+        DayTextWood.text = x;
+
+
+        objectiveshow.GetComponent<TMP_Text>().text = "You have " + Mathf.FloorToInt(Timer.timeInSeconds / 60f) + " minutes to fulfill the objective...";
+
         homeback.SetActive(false);
         if (Day <= 3)
         {
             DayText.text = "Day " + Day + "...";
         } 
         Debug.Log("H " + Day);
-
         ObjectiveText.text = Objective[ObjectiveIndex];
         ObjectiveDisplayText.text = Objective[ObjectiveIndex];  
+
+        if (Day == 1)
+        {
+            player.transform.position = house1.transform.position + offset1;
+        }
+        else if (Day == 2)
+        {
+            player.transform.position = house2.transform.position + offset2;
+        }
+        else if (Day == 3)
+        {
+            player.transform.position = house3.transform.position + offset3;
+        }
+
+        StartCoroutine(ShowObjective());
     }
+
+    IEnumerator ShowObjective()
+        {
+        yield return new WaitForSeconds(10f); // Wait 10 seconds
+
+        objectiveshow.SetActive(true);
+
+        yield return new WaitForSeconds(4f); // Stay visible for 4 seconds
+
+        objectiveshow.SetActive(false);
+        }
 
     public void ClickSubmit()
     {
+        Debug.Log("helloo Inventory count = " + inventory.items.Count);
+        Debug.Log("Collect Inventory ID: " + inventory.GetInstanceID());
+        foreach (InventoryItem item in inventory.items)
+        {
+            Debug.Log("helloo" + item.data.mushroomName + " x" + item.numberof);
+
+        }
         damper.SetActive(true);
         homeback.SetActive(true);
         InspectCam.SetActive(true);
@@ -54,6 +119,7 @@ public class ButtonManager : MonoBehaviour
         SubmitButton.SetActive(false);
         LeanTweenHandle.SlideInTB(homebackdaydisplay, 500, 2.5f);
         LeanTweenHandle.PopIn(homebackbook, 0.7f);
+        sfx.OpenBook();
 
         TextMeshProUGUI tmpComponent = hometext.GetComponent<TextMeshProUGUI>();
         tmpComponent.text = inventory.DayEndDisplay();
@@ -62,39 +128,135 @@ public class ButtonManager : MonoBehaviour
         inventoryui.DestoryUITracker();
     }
 
-    public void ClickNext()
-    {
-        healthclass.isWrong();
-        Debug.Log(inventory.ReturnPoisoned());
-       if (inventory.ReturnPoisoned() > 0)
-        {
-            TextMeshProUGUI tmpComponent = hometext.GetComponent<TextMeshProUGUI>();
-            tmpComponent.text = "You've Been Poisoned!";
-            healthclass.isPoisoned();
-        } else
-        {
-            TextMeshProUGUI tmpComponent = hometext.GetComponent<TextMeshProUGUI>();
-            tmpComponent.text = "You were not poisoned!";
-        }
-        inventory.ResetInventory();
+   public void ClickNext()
+{
+    sfx.OpenBook();
+    healthclass.isWrong();
+    int poisonAmount = inventory.ReturnPoisoned();
 
-        NextDayButton.SetActive(true);
-        NextButton.SetActive(false);
-        LeanTweenHandle.FadeIn(NextDayButton, 0.6f);
+    Debug.Log(poisonAmount);
+
+    if (poisonAmount > 0)
+    {
+        TextMeshProUGUI tmpComponent = hometext.GetComponent<TextMeshProUGUI>();
+        tmpComponent.text = "You've Been Poisoned! Your time will be shorted by 1 minute the next day";
+        healthclass.isPoisoned();
+    }
+    else
+    {
+        TextMeshProUGUI tmpComponent = hometext.GetComponent<TextMeshProUGUI>();
+        tmpComponent.text = "You were not poisoned!";
     }
 
+    inventory.ResetInventory();
+
+    NextDayButton.SetActive(true);
+    NextButton.SetActive(false);
+}
 
     public void ClickNextDay()
     {
+        if (Health.currentHealth == 0)
+        {
+            SceneManager.LoadScene("End");
+            return;
+        }
+
+        if (Day == 3 && Health.currentHealth > 0)
+        {
+            SceneManager.LoadScene("End 1");
+            return;
+        }
+
         Day++;
         ObjectiveIndex++;
         SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().name);
-        Debug.Log("Hello " + Day);
-        if (Day == 4)
+
+    }
+
+    public void Day1RightButtonClikc()
+    {
+        if (Day == 1)
         {
-            SceneManager.LoadScene("2ndVer"); 
+            Day1pg1.SetActive(false);
+            Day1pg2.SetActive(true);
+            Day2pg1.SetActive(false);
+            Day2pg2.SetActive(false);
+            Day1Right.SetActive(false);
+            Day1Left.SetActive(true);
+            sfx.OpenBook();
+
+        } else if (Day == 2)
+        {
+            Day2pg1.SetActive(false);
+            Day2pg2.SetActive(true);
+            Day1pg1.SetActive(false);
+            Day1pg2.SetActive(false);
+            Day1Right.SetActive(false);
+            Day1Left.SetActive(true);
+            sfx.OpenBook();
+        }
+        if (Day == 3 && Day3pg2.activeSelf)
+        {
+            Day3pg3.SetActive(true);
+            Day1Left.SetActive(true);
+            Day1Right.SetActive(false);
+            sfx.OpenBook();
+        }
+        if (Day == 3)
+        {
+            Day3pg2.SetActive(true);
+            Day3pg1.SetActive(false);
+            Day1Right.SetActive(true);
+            Day1Left.SetActive(true);
+            sfx.OpenBook();
         }
     }
 
+    public void Day1LeftButtonClikc()
+    {
+        if(Day == 1)
+        {
+            Day1pg1.SetActive(true);
+            Day1pg2.SetActive(false);
+            Day2pg1.SetActive(false);
+            Day2pg2.SetActive(false);
+            Day1Left.SetActive(false);
+            Day1Right.SetActive(true);
+            sfx.OpenBook();
+        } else if (Day == 2)
+        {
+            Day2pg1.SetActive(true);
+            Day2pg2.SetActive(false);
+            Day1pg1.SetActive(false);
+            Day1pg2.SetActive(false);
+            Day1Left.SetActive(false);
+            Day1Right.SetActive(true);
+            sfx.OpenBook();
+        }
+
+        if (Day == 3 & Day3pg3.activeSelf)
+        {
+            Day1Right.SetActive(true);
+            Day3pg2.SetActive(true);
+            Day3pg3.SetActive(false);
+            sfx.OpenBook();
+        }
+        
+        if (Day == 3)
+        {
+            Day3pg1.SetActive(true);
+            Day3pg2.SetActive(false);
+            Day1Left.SetActive(false);
+            sfx.OpenBook();
+        }
+        
+    }
+
+    public int getDay()
+    {
+        return Day;
+    }
 }
-    
+
+

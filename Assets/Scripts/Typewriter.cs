@@ -5,7 +5,7 @@ using TMPro;
 [RequireComponent(typeof(TMP_Text))]
 public class SimpleTypewriter : MonoBehaviour
 {
-    public float CharactersPerSecond = 25f;
+    public float CharactersPerSecond = 35f;
     public AudioSource TypeSFX;
     private TMP_Text TextBox;
 
@@ -29,6 +29,9 @@ public class SimpleTypewriter : MonoBehaviour
         TextBox.maxVisibleCharacters = 0;
         TextBox.ForceMeshUpdate();
         int totalCharacters = TextBox.textInfo.characterCount;
+
+        // Wait 2 seconds before typing sound starts
+        yield return new WaitForSeconds(1f);
 
         if (TypeSFX != null)
             TypeSFX.Play();

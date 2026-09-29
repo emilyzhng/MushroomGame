@@ -1,14 +1,12 @@
-using JetBrains.Annotations;
-using Unity.VisualScripting;
+
 using UnityEngine;
-using UnityEngine.TextCore;
-using UnityEngine.UI;
+
 
 public class Health : MonoBehaviour
 {
     public HealthUI playerUI;
-    public int maxHealth = 4;
-    public static int currentHealth = 0;
+    public int maxHealth = 1;
+    public static int currentHealth = 4;
     public static Health instance;
     public DailyEffects effects;
     public static bool poisoned;
@@ -42,7 +40,7 @@ public class Health : MonoBehaviour
 
     public void isPoisoned()
     {
-        currentHealth--;
+        currentHealth = currentHealth - 2;
         Debug.Log("Current Health: " + currentHealth);
         playerUI.UpdateHearts(currentHealth);
         poisoned = true;
@@ -58,17 +56,18 @@ public class Health : MonoBehaviour
         }
         if (ButtonManager.Day == 1 && !Inventory.goal1Met)
         {
-            currentHealth--;
+            currentHealth-= 0;
+            Debug.Log("Hello " + currentHealth);
         }
 
         if (ButtonManager.Day == 2 && !Inventory.goal2Met)
         {
-            currentHealth--;
+            currentHealth-= 0;
         }
 
         if (ButtonManager.Day == 3 && (!Inventory.goal2Met || !Inventory.goal1Met))
         {
-            currentHealth--;
+            currentHealth-= 2;
         }
         playerUI.UpdateHearts(currentHealth);
     }

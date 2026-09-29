@@ -1,12 +1,11 @@
 using System.Collections;
 using UnityEngine;
 using TMPro;
-using System.Runtime.Serialization.Formatters;
 
 [RequireComponent(typeof(TMP_Text))]
 public class TypeObj1 : MonoBehaviour
 {
-    public float charactersPerSecond = 1000f;
+    public float charactersPerSecond = 35f;
     public AudioSource typeSFX;
     public static bool isTyping;
 
@@ -33,6 +32,8 @@ public class TypeObj1 : MonoBehaviour
         textBox.maxVisibleCharacters = 0;
         textBox.ForceMeshUpdate();
         int totalCharacters = textBox.textInfo.characterCount;
+
+        yield return new WaitForSeconds(1f);
 
         if (typeSFX != null)
             typeSFX.Play();
